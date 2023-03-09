@@ -14,11 +14,11 @@ function ChatInput({ chatID }: Props) {
   const { data: session } = useSession();
 
   //use SWR to get model
-  const model = "text-davinci-003";
+  const model = "DialoGPT-medium";
 
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    //console.error("##################################")
     if (!prompt) return;
     const input = prompt.trim();
     setPrompt("");
@@ -49,7 +49,7 @@ function ChatInput({ chatID }: Props) {
 
     //Toast notfit for loading
     const notification = toast.loading("ChatGPT is thinking....");
-
+      
     await fetch("/api/askQuestion", {
       method: "POST",
       headers: {
@@ -62,6 +62,7 @@ function ChatInput({ chatID }: Props) {
         session,
       }),
     }).then((response) => {
+      //console.log("ASDASD")
       toast.success("ChatGPT has responded!", {
         id: notification,
       });
@@ -72,7 +73,7 @@ function ChatInput({ chatID }: Props) {
 
   return (
     <div className="bg-gray-700/50 text-gray-400 rounded-lg text-sm ">
-      <form onSubmit={(e) => sendMessage} className="p-5 space-x-5 flex">
+      <form onSubmit={sendMessage} className="p-5 space-x-5 flex">
         <input
           className="bg-transparent focus:outline-none flex-1 disabled:cursor-not-allowed disabled:text-gray-300"
           disabled={!session}
